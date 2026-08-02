@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "website_settings": {
+      "title": "Website Settings",
+      "description": "Global CMS settings for site name, branding, SEO, colors, and links",
+      "type": "document",
+      "path": "settings/main"
+    },
+    "hero_section": {
+      "title": "Hero Section",
+      "description": "CMS configuration for homepage hero headline, buttons, and background",
+      "type": "document",
+      "path": "hero/main"
+    },
+    "templates": {
+      "title": "Templates",
+      "description": "Celebration theme templates for wish cards",
+      "type": "collection",
+      "path": "templates"
+    },
+    "image_library": {
+      "title": "Image Library",
+      "description": "Uploaded media library assets and graphics",
+      "type": "collection",
+      "path": "image_library"
+    },
+    "photo_gallery": {
+      "title": "Photo Gallery",
+      "description": "Managed gallery images for landing showcase",
+      "type": "collection",
+      "path": "photo_gallery"
+    },
+    "music_library": {
+      "title": "Music Library",
+      "description": "Soundtracks and audio files",
+      "type": "collection",
+      "path": "music_library"
+    },
+    "reviews": {
+      "title": "Reviews",
+      "description": "Customer testimonials and ratings",
+      "type": "collection",
+      "path": "reviews"
+    },
+    "wishes": {
+      "title": "Wishes",
+      "description": "User generated birthday wishes and cards",
+      "type": "collection",
+      "path": "wishes"
+    },
+    "admins": {
+      "title": "Admin Users",
+      "description": "Authorized admin account records",
+      "type": "collection",
+      "path": "admins"
+    }
+  }
+}

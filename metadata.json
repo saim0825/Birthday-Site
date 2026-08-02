@@ -1,0 +1,6 @@
+{
+  "name": "CelebrationCraft - Custom Greeting Website Builder",
+  "description": "Create and share interactive custom birthday & greeting websites with dynamic animations, custom themes, floating balloons, music, and shareable short links.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

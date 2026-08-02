@@ -1,0 +1,110 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Flow & Glow Palette Extracted Directly From PDF */
+  --fg-bg-main: #FAF4EE;
+  --fg-bg-card: #FFFDFB;
+  --fg-bg-dark: #32101E;
+  --fg-bg-banner: #3E1523;
+  --fg-pink-primary: #EE4374;
+  --fg-pink-hover: #D82C5D;
+  --fg-pink-light: #FCE7EC;
+  --fg-pink-text: #D82C5D;
+  --fg-text-main: #2A1A1F;
+  --fg-text-body: #635158;
+  --fg-border: rgba(238, 67, 116, 0.12);
+}
+
+body {
+  background-color: var(--fg-bg-main);
+  color: var(--fg-text-main);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+.font-serif-display {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+@layer utilities {
+  /* Flow & Glow Canvas Mesh */
+  .flow-bg-mesh {
+    background-color: #FAF4EE;
+    background-image: 
+      radial-gradient(circle at 10% 10%, rgba(254, 215, 226, 0.7) 0%, transparent 45%),
+      radial-gradient(circle at 90% 15%, rgba(251, 207, 232, 0.5) 0%, transparent 40%),
+      radial-gradient(circle at 50% 65%, rgba(254, 226, 226, 0.4) 0%, transparent 50%),
+      radial-gradient(circle at 80% 85%, rgba(253, 242, 248, 0.8) 0%, transparent 45%);
+    background-attachment: fixed;
+  }
+
+  /* Flow & Glow Card Style */
+  .flow-card {
+    background: #FFFDFB;
+    border: 1px solid rgba(238, 67, 116, 0.12);
+    box-shadow: 0 15px 35px rgba(238, 67, 116, 0.05), 0 3px 10px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .flow-card:hover {
+    border-color: rgba(238, 67, 116, 0.3);
+    box-shadow: 0 20px 45px rgba(238, 67, 116, 0.12);
+    transform: translateY(-3px);
+  }
+
+  /* Flow Dark Plum Card */
+  .flow-card-dark {
+    background-color: #32101E;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(50, 16, 30, 0.25);
+  }
+
+  /* Flow Primary Pink Button */
+  .flow-btn-primary {
+    background-color: #EE4374;
+    color: #FFFFFF;
+    box-shadow: 0 8px 24px rgba(238, 67, 116, 0.3);
+    transition: all 0.25s ease;
+  }
+
+  .flow-btn-primary:hover {
+    background-color: #D82C5D;
+    box-shadow: 0 12px 28px rgba(238, 67, 116, 0.4);
+    transform: scale(1.02);
+  }
+
+  .flow-btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  /* Flow Badge Pill */
+  .flow-badge {
+    background-color: #FCE7EC;
+    color: #D82C5D;
+    border: 1px solid rgba(216, 44, 93, 0.18);
+  }
+
+  /* Flow Rose Text Highlight */
+  .flow-text-rose {
+    color: #EE4374;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAF4EE;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(238, 67, 116, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(238, 67, 116, 0.6);
+}

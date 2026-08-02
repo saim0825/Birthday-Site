@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Bisma - Unboxing Experience</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #050508;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    .font-serif {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* 3D Envelope Animation Styles */
+    .envelope-wrapper {
+      perspective: 1200px;
+    }
+
+    .envelope {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      height: 290px;
+      background: linear-gradient(135deg, #1e112a 0%, #0f0a1c 100%);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(124, 58, 237, 0.25), 0 0 40px rgba(0, 0, 0, 0.8);
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .envelope:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+
+    /* Envelope Top Flap */
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 140px;
+      background: linear-gradient(180deg, #2a163d 0%, #170d26 100%);
+      border-bottom: 2px solid rgba(216, 180, 254, 0.2);
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+      transform-origin: top center;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 30;
+    }
+
+    .envelope.open .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 10;
+    }
+
+    /* Wax Seal */
+    .wax-seal {
+      position: absolute;
+      top: 110px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 54px;
+      height: 54px;
+      background: radial-gradient(circle, #e11d48 0%, #9f1239 70%, #480b1a 100%);
+      border: 2px solid #fde047;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(225, 29, 72, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+      z-index: 40;
+      transition: all 0.5s ease;
+    }
+
+    .envelope.open .wax-seal {
+      opacity: 0;
+      transform: translateX(-50%) scale(0.5);
+    }
+
+    /* Letter inside Envelope */
+    .letter-preview {
+      position: absolute;
+      top: 20px;
+      left: 5%;
+      width: 90%;
+      height: 250px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
+      z-index: 20;
+    }
+
+    .envelope.open .letter-preview {
+      transform: translateY(-120px) scale(1.05);
+      opacity: 0;
+    }
+
+    /* Main Letter Container Reveal */
+    .card-container {
+      opacity: 0;
+      transform: translateY(40px) scale(0.96);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .card-container.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    /* Glassmorphic Cards */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    /* Candle Flame Animation */
+    @keyframes flameFlicker {
+      0%, 100% { transform: scale(1) rotate(-1deg); opacity: 0.9; }
+      50% { transform: scale(1.15) rotate(2deg); opacity: 1; filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.9)); }
+    }
+
+    .flame-anim {
+      animation: flameFlicker 0.8s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen relative flex flex-col items-center justify-start p-4 sm:p-6 overflow-x-hidden">
+
+  <!-- Background Ambient Glow Orbs -->
+  <div class="fixed top-[-100px] left-[-100px] w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="fixed bottom-[-100px] right-[-100px] w-[600px] h-[600px] bg-pink-900/20 rounded-full blur-[160px] pointer-events-none"></div>
+
+  <!-- ==================== 1. ENVELOPE UNBOXING INTRO ==================== -->
+  <div id="envelopeSection" class="w-full max-w-md my-auto py-12 flex flex-col items-center justify-center text-center z-50 transition-all duration-700">
+    
+    <div class="mb-6 space-y-2">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-bold uppercase tracking-widest">
+        <span>💌 Special Delivery</span>
+      </div>
+      <h1 class="text-3xl font-extrabold text-white">You've Received a Wish!</h1>
+      <p class="text-xs text-gray-400">Tap the envelope to unbox your interactive birthday letter</p>
+    </div>
+
+    <!-- Envelope Wrapper -->
+    <div class="envelope-wrapper my-4 w-full flex justify-center">
+      <div id="envelope" class="envelope" onclick="openEnvelope()">
+        <!-- Flap -->
+        <div class="envelope-flap"></div>
+
+        <!-- Wax Seal -->
+        <div class="wax-seal">
+          <span class="text-yellow-300 text-xl font-bold">💖</span>
+        </div>
+
+        <!-- Inner Letter Preview -->
+        <div class="letter-preview p-6 flex flex-col justify-center items-center text-center">
+          <span class="text-xs uppercase tracking-widest text-purple-300 font-bold mb-1">Happy Birthday</span>
+          <h3 class="text-xl font-serif italic text-white font-bold">For Bisma</h3>
+        </div>
+
+        <!-- Envelope Front Label -->
+        <div class="absolute bottom-6 left-6 right-6 flex items-center justify-between text-xs text-gray-300 border-t border-white/10 pt-3 z-30">
+          <span class="font-bold text-purple-300">To: Bisma ✨</span>
+          <span class="text-gray-400">From: Someone Special</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Open Letter CTA Button -->
+    <button onclick="openEnvelope()" class="mt-8 px-8 py-3.5 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-extrabold text-sm shadow-xl shadow-purple-900/40 transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2">
+      <span>✨ Tap to Open Letter ✨</span>
+    </button>
+  </div>
+
+
+  <!-- ==================== 2. MAIN CARD CONTENT ==================== -->
+  <div id="cardSection" class="card-container w-full max-w-2xl my-6 space-y-8 z-20 hidden">
+
+    <!-- Celebration Header -->
+    <div class="glass-card rounded-[32px] p-8 text-center relative overflow-hidden">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 text-xs font-extrabold uppercase tracking-widest mb-4">
+        <span>🎉 Official Birthday Celebration</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl font-black tracking-tight mb-3">
+        Happy Birthday, <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 bg-clip-text text-transparent">Bisma! 🎂</span>
+      </h1>
+
+      <p class="text-gray-300 text-sm sm:text-base font-medium max-w-md mx-auto">
+        Wishing you a day filled with boundless laughter, love, and extraordinary moments!
+      </p>
+    </div>
+
+    <!-- Glowing Photo Frame -->
+    <div class="glass-card rounded-[32px] p-4 sm:p-6 relative group overflow-hidden">
+      <div class="absolute -inset-1 rounded-[34px] bg-gradient-to-r from-purple-600 to-pink-600 opacity-30 blur-xl group-hover:opacity-60 transition duration-500"></div>
+
+      <div class="relative aspect-[4/3] w-full rounded-[24px] overflow-hidden bg-slate-950 border border-white/10 shadow-2xl">
+        <img 
+          src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop" 
+          alt="Bisma Birthday" 
+          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        <div class="absolute bottom-4 left-4 right-4 text-xs font-semibold text-gray-200 bg-black/60 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/10 flex items-center justify-between">
+          <span>✨ Unforgettable Memories</span>
+          <span class="text-purple-300 font-bold">1 / 1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Heartfelt Custom Message Box -->
+    <div class="glass-card rounded-[32px] p-6 sm:p-8 space-y-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-pink-400 text-lg">
+          💖
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-white">A Special Message For You</h3>
+          <p class="text-xs text-gray-400">Written with love</p>
+        </div>
+      </div>
+
+      <blockquote class="text-base sm:text-lg text-gray-200 italic border-l-4 border-pink-500 pl-4 py-1 my-2 leading-relaxed">
+        "To the incredible Bisma, may this year bring you all the success, happiness, and magical adventures you truly deserve! Keep shining bright as always!"
+      </blockquote>
+
+      <!-- Styled Sender Signature Block -->
+      <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-gray-400">
+        <span class="font-extrabold text-purple-300">✨ With love, Your Best Friend ✨</span>
+        <span>July 31, 2026</span>
+      </div>
+    </div>
+
+    <!-- Interactive Birthday Cake & Candles -->
+    <div class="glass-card rounded-[32px] p-6 text-center space-y-4">
+      <h3 class="text-lg font-bold text-white">🎂 Make a Wish & Blow out the Candles!</h3>
+      <p id="candleStatus" class="text-xs text-gray-400">Tap the candles below to make your wish</p>
+
+      <div onclick="blowCandles()" class="cursor-pointer py-4 transition-transform hover:scale-105 active:scale-95 flex flex-col items-center">
+        <!-- Candle Flames -->
+        <div class="flex items-end gap-5 mb-1">
+          <div class="flex flex-col items-center">
+            <div id="flame1" class="flame-anim text-amber-400 text-2xl">🔥</div>
+            <div class="w-2.5 h-8 bg-pink-400 rounded-t-sm"></div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div id="flame2" class="flame-anim text-amber-400 text-2xl">🔥</div>
+            <div class="w-2.5 h-8 bg-purple-400 rounded-t-sm"></div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div id="flame3" class="flame-anim text-amber-400 text-2xl">🔥</div>
+            <div class="w-2.5 h-8 bg-amber-400 rounded-t-sm"></div>
+          </div>
+        </div>
+
+        <!-- Cake Tier 1 -->
+        <div class="w-48 h-12 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 rounded-t-2xl flex items-center justify-around px-4 shadow-lg">
+          <span>🍓</span><span>🍓</span><span>🍓</span>
+        </div>
+        <!-- Cake Tier 2 -->
+        <div class="w-56 h-14 bg-gradient-to-r from-purple-800 via-indigo-900 to-purple-800 rounded-b-2xl flex items-center justify-center border-t border-white/20">
+          <span class="text-xs font-bold text-purple-200 tracking-widest uppercase">HAPPY BIRTHDAY BISMA</span>
+        </div>
+      </div>
+
+      <button id="candleBtn" onclick="blowCandles()" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-pink-500 text-black font-extrabold text-xs shadow-lg cursor-pointer">
+        🔥 Click to Blow Out Candles
+      </button>
+    </div>
+
+    <!-- Surprise Gift Box -->
+    <div class="glass-card rounded-[32px] p-6 text-center space-y-4">
+      <h3 class="text-lg font-bold text-white">🎁 Unbox Secret Birthday Surprise</h3>
+
+      <div id="giftBox" onclick="openGift()" class="cursor-pointer py-4 transition-transform hover:scale-110 flex flex-col items-center">
+        <div class="text-6xl animate-bounce">🎁</div>
+        <span class="text-xs font-bold text-purple-300 mt-2">Tap to Unbox Gift 🎀</span>
+      </div>
+
+      <div id="secretMessage" class="hidden bg-purple-950/60 border border-purple-500/40 p-4 rounded-2xl text-left text-xs text-gray-200">
+        <span class="font-bold text-purple-300 block mb-1">🎉 Secret Gift Note:</span>
+        Your actual surprise gift code: <strong class="text-amber-300 font-mono">BISMA-VIP-2026</strong> (Valid for a dinner treat & lifetime hug!)
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    let isOpen = false;
+
+    // Trigger full-screen confetti burst using canvas-confetti
+    function triggerConfetti() {
+      const count = 200;
+      const defaults = {
+        origin: { y: 0.7 }
+      };
+
+      function fire(particleRatio, opts) {
+        confetti(Object.assign({}, defaults, opts, {
+          particleCount: Math.floor(count * particleRatio)
+        }));
+      }
+
+      fire(0.25, {
+        spread: 26,
+        startVelocity: 55,
+      });
+      fire(0.2, {
+        spread: 60,
+      });
+      fire(0.35, {
+        spread: 100,
+        decay: 0.91,
+        scalar: 0.8
+      });
+      fire(0.1, {
+        spread: 120,
+        startVelocity: 25,
+        decay: 0.92,
+        scalar: 1.2
+      });
+      fire(0.1, {
+        spread: 120,
+        startVelocity: 45,
+      });
+    }
+
+    // Open Envelope Function
+    function openEnvelope() {
+      if (isOpen) return;
+      isOpen = true;
+
+      const envelope = document.getElementById("envelope");
+      envelope.classList.add("open");
+
+      // Slide envelope out & reveal main card after flap animation completes
+      setTimeout(() => {
+        const envelopeSection = document.getElementById("envelopeSection");
+        const cardSection = document.getElementById("cardSection");
+
+        envelopeSection.style.opacity = "0";
+        envelopeSection.style.transform = "scale(0.9) translateY(-20px)";
+
+        setTimeout(() => {
+          envelopeSection.classList.add("hidden");
+          cardSection.classList.remove("hidden");
+          setTimeout(() => {
+            cardSection.classList.add("visible");
+            triggerConfetti();
+          }, 50);
+        }, 400);
+
+      }, 700);
+    }
+
+    // Blow Out Candles Interactive Logic
+    let candlesBlown = false;
+    function blowCandles() {
+      if (candlesBlown) return;
+      candlesBlown = true;
+
+      document.getElementById("flame1").innerHTML = "💨";
+      document.getElementById("flame2").innerHTML = "💨";
+      document.getElementById("flame3").innerHTML = "💨";
+
+      document.getElementById("candleStatus").innerText = "✨ Wish made! The candles are blown out! 🎉";
+      const btn = document.getElementById("candleBtn");
+      btn.innerText = "✨ Candles Extinguished! 🎊";
+      btn.className = "w-full py-3 rounded-xl bg-emerald-500/20 text-emerald-300 font-bold text-xs border border-emerald-500/40";
+
+      triggerConfetti();
+    }
+
+    // Unbox Secret Gift Logic
+    function openGift() {
+      document.getElementById("giftBox").classList.add("hidden");
+      document.getElementById("secretMessage").classList.remove("hidden");
+      triggerConfetti();
+    }
+  </script>
+</body>
+</html>
