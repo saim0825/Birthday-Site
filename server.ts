@@ -228,11 +228,11 @@ if (process.env.GEMINI_API_KEY) {
 let totalBalloonsPopped = 14280;
 
 // API Endpoints
-app.get("/api/health", (req, res) => {
+app.get(["/api/health", "/health"], (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-app.get("/api/stats", (req, res) => {
+app.get(["/api/stats", "/stats"], (req, res) => {
   const cardCount = Object.keys(cardsDatabase).length;
   let totalViews = 0;
   Object.values(cardsDatabase).forEach(card => {
@@ -245,13 +245,13 @@ app.get("/api/stats", (req, res) => {
   });
 });
 
-app.post("/api/pop-balloon", (req, res) => {
+app.post(["/api/pop-balloon", "/pop-balloon"], (req, res) => {
   totalBalloonsPopped++;
   res.json({ balloonsPopped: totalBalloonsPopped });
 });
 
 // GET Card by ID or Slug
-app.get("/api/cards/:id", async (req, res) => {
+app.get(["/api/cards/:id", "/cards/:id"], async (req, res) => {
   try {
     const id = req.params.id;
     let card = cardsDatabase[id];
@@ -285,7 +285,7 @@ app.get("/api/cards/:id", async (req, res) => {
 });
 
 // GET Recent Public Cards for Gallery
-app.get("/api/cards", (req, res) => {
+app.get(["/api/cards", "/cards"], (req, res) => {
   const cards = Object.values(cardsDatabase)
     // deduplicate by ID
     .reduce((acc: CardData[], current) => {
@@ -403,11 +403,10 @@ const handleCreateCard = async (req: express.Request, res: express.Response) => 
   }
 };
 
-app.post("/api/cards", handleCreateCard);
-app.post("/api/save-card", handleCreateCard);
+app.post(["/api/cards", "/cards", "/api/save-card", "/save-card"], handleCreateCard);
 
 // ADD Reaction to a Card
-app.post("/api/cards/:id/reaction", (req, res) => {
+app.post(["/api/cards/:id/reaction", "/cards/:id/reaction"], (req, res) => {
   const id = req.params.id;
   const card = cardsDatabase[id];
 
@@ -431,7 +430,7 @@ app.post("/api/cards/:id/reaction", (req, res) => {
 });
 
 // AI Wish Generator Endpoint
-app.post("/api/generate-wish", async (req, res) => {
+app.post(["/api/generate-wish", "/generate-wish"], async (req, res) => {
   try {
     const { recipientName, senderName, relationship, occasion, tone } = req.body;
 
