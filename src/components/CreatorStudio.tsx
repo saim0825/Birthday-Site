@@ -111,7 +111,15 @@ export const CreatorStudio: React.FC<CreatorStudioProps> = ({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/cards", {
+      // Determine endpoint with relative path or VITE_API_BASE_URL if configured
+      const baseUrl = import.meta.env.VITE_API_BASE_URL
+        ? import.meta.env.VITE_API_BASE_URL.replace(/\/$/, "")
+        : "";
+      const endpoint = `${baseUrl}/api/cards`;
+
+      console.log("[CreatorStudio] Sending card submission request to:", endpoint);
+
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -129,9 +137,18 @@ export const CreatorStudio: React.FC<CreatorStudioProps> = ({
         })
       });
 
-      const data = await response.json();
+      let data: any = {};
+      const contentType = response.headers.get("content-type");
 
-      if (data.success && data.card) {
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        console.error("[CreatorStudio] Non-JSON API response received:", response.status, text);
+        data = { error: `Server returned HTTP ${response.status}: ${text.slice(0, 150) || "Invalid server response"}` };
+      }
+
+      if (response.ok && data.success && data.card) {
         soundFx.playTaDa();
         fireConfettiCannon();
         onCreatedCard(data.card, data.shortUrl);
@@ -141,11 +158,13 @@ export const CreatorStudio: React.FC<CreatorStudioProps> = ({
           cardId: data.card.id
         });
       } else {
-        alert(data.error || "Failed to generate link");
+        const errorMsg = data.error || data.message || `HTTP ${response.status}: Failed to generate link`;
+        console.error("[CreatorStudio] API error saving card:", errorMsg, data);
+        alert(`Error saving card: ${errorMsg}`);
       }
-    } catch (err) {
-      console.error("Error generating card link:", err);
-      alert("Failed to save card. Please check network connection.");
+    } catch (err: any) {
+      console.error("[CreatorStudio] Exception saving card:", err);
+      alert(`Failed to save card: ${err?.message || "Please check network connection or server status."}`);
     } finally {
       setIsSubmitting(false);
     }

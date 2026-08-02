@@ -4,6 +4,8 @@ import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import { nanoid } from "nanoid";
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getFirestore, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 const app = express();
 const PORT = 3000;
@@ -14,8 +16,27 @@ app.use(express.json({ limit: "25mb" }));
 const DATA_DIR = path.join(process.cwd(), "data");
 const CARDS_FILE = path.join(DATA_DIR, "cards.json");
 
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+// Firebase connection pooling setup
+let db: ReturnType<typeof getFirestore> | null = null;
+try {
+  const configPath = path.join(process.cwd(), "firebase-applet-config.json");
+  if (fs.existsSync(configPath)) {
+    const firebaseConfigJson = JSON.parse(fs.readFileSync(configPath, "utf-8"));
+    const firebaseConfig = {
+      apiKey: firebaseConfigJson.apiKey,
+      authDomain: firebaseConfigJson.authDomain,
+      projectId: firebaseConfigJson.projectId,
+      storageBucket: firebaseConfigJson.storageBucket,
+      messagingSenderId: firebaseConfigJson.messagingSenderId,
+      appId: firebaseConfigJson.appId,
+    };
+    const firebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+    const databaseId = firebaseConfigJson.firestoreDatabaseId || "(default)";
+    db = getFirestore(firebaseApp, databaseId);
+    console.log("[Firebase] Firestore database connection initialized with connection pooling.");
+  }
+} catch (err) {
+  console.warn("[Firebase] Could not initialize Firestore on server:", err);
 }
 
 export interface CardData {
@@ -51,7 +72,7 @@ function loadCardsFromDisk() {
     if (fs.existsSync(CARDS_FILE)) {
       const content = fs.readFileSync(CARDS_FILE, "utf-8");
       cardsDatabase = JSON.parse(content);
-      console.log(`Loaded ${Object.keys(cardsDatabase).length} cards from storage.`);
+      console.log(`Loaded ${Object.keys(cardsDatabase).length} cards from local storage.`);
     } else {
       seedDefaultCards();
     }
@@ -63,10 +84,44 @@ function loadCardsFromDisk() {
 
 function saveCardsToDisk() {
   try {
+    if (!fs.existsSync(DATA_DIR)) {
+      try {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+      } catch (mkdirErr) {
+        // Read-only filesystem handling on serverless platforms like Vercel
+      }
+    }
     fs.writeFileSync(CARDS_FILE, JSON.stringify(cardsDatabase, null, 2), "utf-8");
-  } catch (err) {
-    console.error("Failed to save cards database:", err);
+  } catch (err: any) {
+    console.warn("Notice: Local disk persistence unavailable (Vercel serverless environment):", err?.message || err);
   }
+}
+
+async function saveCardToFirestore(card: CardData) {
+  if (!db) return;
+  try {
+    const cardRef = doc(db, "cards", card.id);
+    await setDoc(cardRef, card, { merge: true });
+    console.log(`[Firestore] Successfully saved card ${card.id}`);
+  } catch (err) {
+    console.error(`[Firestore] Error saving card ${card.id}:`, err);
+  }
+}
+
+async function getCardFromFirestore(id: string): Promise<CardData | null> {
+  if (!db) return null;
+  try {
+    const cardRef = doc(db, "cards", id);
+    const snap = await getDoc(cardRef);
+    if (snap.exists()) {
+      const data = snap.data() as CardData;
+      cardsDatabase[id] = data; // Cache in serverless memory
+      return data;
+    }
+  } catch (err) {
+    console.error(`[Firestore] Error fetching card ${id}:`, err);
+  }
+  return null;
 }
 
 function seedDefaultCards() {
@@ -157,19 +212,37 @@ app.post("/api/pop-balloon", (req, res) => {
 });
 
 // GET Card by ID or Slug
-app.get("/api/cards/:id", (req, res) => {
-  const id = req.params.id;
-  const card = cardsDatabase[id];
+app.get("/api/cards/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    let card = cardsDatabase[id];
 
-  if (!card) {
-    return res.status(404).json({ error: "Card not found" });
+    if (!card) {
+      card = (await getCardFromFirestore(id)) || undefined;
+    }
+
+    if (!card) {
+      return res.status(404).json({ success: false, error: "Card not found" });
+    }
+
+    // Increment view count
+    card.views = (card.views || 0) + 1;
+    saveCardsToDisk();
+
+    if (db) {
+      try {
+        const cardRef = doc(db, "cards", card.id);
+        await updateDoc(cardRef, { views: card.views }).catch(() => {});
+      } catch (err) {
+        // Ignore view update background errors
+      }
+    }
+
+    return res.json(card);
+  } catch (err: any) {
+    console.error(`[API GET /api/cards/${req.params.id} Error]:`, err);
+    return res.status(500).json({ success: false, error: err?.message || "Internal server error fetching card" });
   }
-
-  // Increment view count
-  card.views = (card.views || 0) + 1;
-  saveCardsToDisk();
-
-  res.json(card);
 });
 
 // GET Recent Public Cards for Gallery
@@ -187,9 +260,16 @@ app.get("/api/cards", (req, res) => {
   res.json(cards);
 });
 
-// CREATE New Card
-app.post("/api/cards", (req, res) => {
+// CREATE New Card Handler
+const handleCreateCard = async (req: express.Request, res: express.Response) => {
   try {
+    console.log("[API POST /api/cards] Incoming payload:", {
+      recipientName: req.body?.recipientName,
+      senderName: req.body?.senderName,
+      occasion: req.body?.occasion,
+      imageCount: Array.isArray(req.body?.images) ? req.body.images.length : 0
+    });
+
     const {
       recipientName,
       senderName,
@@ -202,16 +282,20 @@ app.post("/api/cards", (req, res) => {
       interactiveOptions,
       secretMessage,
       customSlug
-    } = req.body;
+    } = req.body || {};
 
     if (!recipientName || !senderName || !message) {
-      return res.status(400).json({ error: "Recipient name, sender name, and message are required" });
+      console.warn("[API POST /api/cards] Missing required fields");
+      return res.status(400).json({
+        success: false,
+        error: "Recipient name, sender name, and message are required"
+      });
     }
 
     const shortId = nanoid(8);
     let finalId = shortId;
 
-    if (customSlug && customSlug.trim().length > 2) {
+    if (customSlug && typeof customSlug === "string" && customSlug.trim().length > 2) {
       const sanitizedSlug = customSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-");
       if (!cardsDatabase[sanitizedSlug]) {
         finalId = sanitizedSlug;
@@ -221,10 +305,10 @@ app.post("/api/cards", (req, res) => {
     const newCard: CardData = {
       id: finalId,
       slug: customSlug ? finalId : undefined,
-      recipientName: recipientName.trim(),
-      senderName: senderName.trim(),
+      recipientName: String(recipientName).trim(),
+      senderName: String(senderName).trim(),
       occasion: occasion || "Birthday",
-      message: message.trim(),
+      message: String(message).trim(),
       templateId: templateId || "interactive-suite",
       images: Array.isArray(images) && images.length > 0 ? images : [
         {
@@ -248,24 +332,40 @@ app.post("/api/cards", (req, res) => {
       reactions: []
     };
 
+    // 1. Memory cache
     cardsDatabase[finalId] = newCard;
     if (newCard.id !== shortId) {
       cardsDatabase[shortId] = newCard;
     }
 
+    // 2. Local disk backup (if directory is writable)
     saveCardsToDisk();
 
-    res.status(201).json({
+    // 3. Persistent Firestore sync
+    await saveCardToFirestore(newCard);
+
+    // Host & Protocol determination
+    const protocol = (req.headers["x-forwarded-proto"] as string) || req.protocol || "https";
+    const host = req.get("host") || "localhost:3000";
+    const fullUrl = `${protocol}://${host}/w/${finalId}`;
+
+    return res.status(201).json({
       success: true,
       card: newCard,
       shortUrl: `/w/${finalId}`,
-      fullUrl: `${req.protocol}://${req.get("host")}/w/${finalId}`
+      fullUrl
     });
   } catch (err: any) {
-    console.error("Error creating card:", err);
-    res.status(500).json({ error: "Failed to create greeting card website" });
+    console.error("[API POST /api/cards Error]:", err);
+    return res.status(500).json({
+      success: false,
+      error: err?.message || "Internal server error saving card"
+    });
   }
-});
+};
+
+app.post("/api/cards", handleCreateCard);
+app.post("/api/save-card", handleCreateCard);
 
 // ADD Reaction to a Card
 app.post("/api/cards/:id/reaction", (req, res) => {
