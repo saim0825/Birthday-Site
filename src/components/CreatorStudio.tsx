@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { CardData, CardImage } from "../types";
 import { AiWishModal } from "./AiWishModal";
-import { BismaCard } from "./TemplateCards/BismaCard";
+import { InteractiveCelebrationCard } from "./TemplateCards/InteractiveCelebrationCard";
 import { RoyalGoldenCard } from "./TemplateCards/RoyalGoldenCard";
 import { NeonCyberCard } from "./TemplateCards/NeonCyberCard";
 import { SweetHeartCard } from "./TemplateCards/SweetHeartCard";
+import { GlassmorphismEnvelopeCard } from "./TemplateCards/GlassmorphismEnvelopeCard";
 import {
   Sparkles,
   Wand2,
@@ -35,16 +36,16 @@ interface CreatorStudioProps {
 }
 
 export const CreatorStudio: React.FC<CreatorStudioProps> = ({
-  initialTemplateId = "bisma-interactive",
+  initialTemplateId = "interactive-suite",
   onCreatedCard,
   onNavigate
 }) => {
   const [templateId, setTemplateId] = useState(initialTemplateId);
-  const [recipientName, setRecipientName] = useState("Bisma");
+  const [recipientName, setRecipientName] = useState("Sarah");
   const [senderName, setSenderName] = useState("Your Besties");
   const [occasion, setOccasion] = useState("Birthday");
   const [message, setMessage] = useState(
-    "Happy Birthday Bisma! 🎉 May your day be filled with endless laughter, boundless joy, sweet surprises, and all the happiness in the world!"
+    "Happy Birthday Sarah! 🎉 May your day be filled with endless laughter, boundless joy, sweet surprises, and all the happiness in the world!"
   );
   const [themeColor, setThemeColor] = useState("#EE4374");
   const [musicTrack, setMusicTrack] = useState("happy-piano");
@@ -229,7 +230,8 @@ export const CreatorStudio: React.FC<CreatorStudioProps> = ({
 
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { id: "bisma-interactive", title: "Bisma Celebration", badge: "Most Popular", color: "from-[#EE4374] to-purple-600" },
+                    { id: "interactive-suite", title: "Grand Celebration", badge: "Most Popular", color: "from-[#EE4374] to-purple-600" },
+                    { id: "glassmorphism-envelope", title: "Envelope & Memories", badge: "New & Interactive", color: "from-purple-500 to-pink-500" },
                     { id: "royal-golden", title: "Royal Gold Velvet", badge: "VIP Luxury", color: "from-amber-500 to-yellow-600" },
                     { id: "neon-cyber", title: "Cyber Neon Glow", badge: "High Energy", color: "from-cyan-400 to-fuchsia-600" },
                     { id: "sweet-heart", title: "Sweet Heart Pink", badge: "Romantic", color: "from-pink-400 to-rose-500" }
@@ -269,7 +271,7 @@ export const CreatorStudio: React.FC<CreatorStudioProps> = ({
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Bisma"
+                      placeholder="e.g. Sarah"
                       value={recipientName}
                       onChange={(e) => setRecipientName(e.target.value)}
                       className="w-full bg-[#FAF4EE] border border-[#EE4374]/20 rounded-xl px-3.5 py-2.5 text-xs text-[#2A1A1F] focus:outline-none focus:border-[#EE4374] focus:ring-1 focus:ring-[#EE4374]/30 font-semibold"
@@ -407,7 +409,7 @@ export const CreatorStudio: React.FC<CreatorStudioProps> = ({
                     <span className="text-[#635158] mr-1">app.com/w/</span>
                     <input
                       type="text"
-                      placeholder="bisma-birthday"
+                      placeholder="birthday-demo"
                       value={customSlug}
                       onChange={(e) => setCustomSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
                       className="bg-transparent text-[#2A1A1F] font-bold outline-none flex-1"
@@ -451,14 +453,16 @@ export const CreatorStudio: React.FC<CreatorStudioProps> = ({
 
               {/* Live Card Render Frame */}
               <div className="rounded-2xl overflow-hidden max-h-[750px] overflow-y-auto border border-[#EE4374]/15 bg-[#FAF4EE]">
-                {templateId === "royal-golden" ? (
+                {templateId === "royal-golden" || templateId === "royal-luxury" ? (
                   <RoyalGoldenCard card={previewCardData} />
-                ) : templateId === "neon-cyber" ? (
+                ) : templateId === "neon-cyber" || templateId === "cyberpunk-neon" ? (
                   <NeonCyberCard card={previewCardData} />
-                ) : templateId === "sweet-heart" ? (
+                ) : templateId === "sweet-heart" || templateId === "sweet-pastel" ? (
                   <SweetHeartCard card={previewCardData} />
+                ) : templateId === "glassmorphism-envelope" ? (
+                  <GlassmorphismEnvelopeCard card={previewCardData} />
                 ) : (
-                  <BismaCard card={previewCardData} />
+                  <InteractiveCelebrationCard card={previewCardData} />
                 )}
               </div>
             </div>

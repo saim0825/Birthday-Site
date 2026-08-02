@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { CardData } from "../types";
-import { BismaCard } from "./TemplateCards/BismaCard";
+import { InteractiveCelebrationCard } from "./TemplateCards/InteractiveCelebrationCard";
 import { RoyalGoldenCard } from "./TemplateCards/RoyalGoldenCard";
 import { NeonCyberCard } from "./TemplateCards/NeonCyberCard";
 import { SweetHeartCard } from "./TemplateCards/SweetHeartCard";
+import { GlassmorphismEnvelopeCard } from "./TemplateCards/GlassmorphismEnvelopeCard";
 import { HeroBalloonCanvas } from "./HeroBalloonCanvas";
 import { Loader2, AlertCircle, ArrowLeft, PlusCircle, Sparkles } from "lucide-react";
 
@@ -88,14 +89,16 @@ export const ViewerPage: React.FC<ViewerPageProps> = ({ cardId, onNavigate }) =>
       {card.interactiveOptions?.balloons !== false && <HeroBalloonCanvas />}
 
       {/* Render Template Card */}
-      {card.templateId === "royal-golden" ? (
+      {card.templateId === "royal-golden" || card.templateId === "royal-luxury" ? (
         <RoyalGoldenCard card={card} onSendReaction={handleSendReaction} />
-      ) : card.templateId === "neon-cyber" ? (
+      ) : card.templateId === "neon-cyber" || card.templateId === "cyberpunk-neon" ? (
         <NeonCyberCard card={card} onSendReaction={handleSendReaction} />
-      ) : card.templateId === "sweet-heart" ? (
+      ) : card.templateId === "sweet-heart" || card.templateId === "sweet-pastel" ? (
         <SweetHeartCard card={card} onSendReaction={handleSendReaction} />
+      ) : card.templateId === "glassmorphism-envelope" || card.templateId === "envelope-overlay" ? (
+        <GlassmorphismEnvelopeCard card={card} onSendReaction={handleSendReaction} />
       ) : (
-        <BismaCard card={card} onSendReaction={handleSendReaction} />
+        <InteractiveCelebrationCard card={card} onSendReaction={handleSendReaction} />
       )}
 
       {/* Persistent CTA Bar Driving Virality */}

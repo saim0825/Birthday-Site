@@ -70,14 +70,14 @@ function saveCardsToDisk() {
 }
 
 function seedDefaultCards() {
-  const sampleBismaCard: CardData = {
-    id: "bisma-birthday",
-    slug: "bisma-birthday",
-    recipientName: "Bisma",
+  const sampleBirthdayCard: CardData = {
+    id: "birthday-demo",
+    slug: "birthday-demo",
+    recipientName: "Sarah",
     senderName: "Your Besties",
     occasion: "Birthday",
-    message: "Happy Birthday Bisma! 🎉 May your day be filled with endless laughter, boundless joy, sweet memories, and all the happiness in the world. You bring so much light and positive energy into everyone's life. Keep shining brightly!",
-    templateId: "bisma-interactive",
+    message: "Happy Birthday Sarah! 🎉 May your day be filled with endless laughter, boundless joy, sweet memories, and all the happiness in the world. You bring so much light and positive energy into everyone's life. Keep shining brightly!",
+    templateId: "interactive-suite",
     images: [
       {
         url: "https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=800&auto=format&fit=crop",
@@ -106,12 +106,12 @@ function seedDefaultCards() {
     createdAt: new Date().toISOString(),
     views: 42,
     reactions: [
-      { emoji: "💖", text: "Thank you so so much!! This made my entire day! 🎉", from: "Bisma", date: new Date().toISOString() }
+      { emoji: "💖", text: "Thank you so so much!! This made my entire day! 🎉", from: "Sarah", date: new Date().toISOString() }
     ]
   };
 
-  cardsDatabase[sampleBismaCard.id] = sampleBismaCard;
-  cardsDatabase[sampleBismaCard.slug!] = sampleBismaCard;
+  cardsDatabase[sampleBirthdayCard.id] = sampleBirthdayCard;
+  cardsDatabase[sampleBirthdayCard.slug!] = sampleBirthdayCard;
   saveCardsToDisk();
 }
 
@@ -225,7 +225,7 @@ app.post("/api/cards", (req, res) => {
       senderName: senderName.trim(),
       occasion: occasion || "Birthday",
       message: message.trim(),
-      templateId: templateId || "bisma-interactive",
+      templateId: templateId || "interactive-suite",
       images: Array.isArray(images) && images.length > 0 ? images : [
         {
           url: "https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=800&auto=format&fit=crop",

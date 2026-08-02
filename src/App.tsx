@@ -11,8 +11,8 @@ import { AdminDashboard } from "./components/admin/AdminDashboard";
 
 function AppContent() {
   const [currentView, setCurrentView] = useState<"landing" | "creator" | "gallery" | "view" | "admin">("landing");
-  const [activeCardId, setActiveCardId] = useState<string>("bisma-birthday");
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string>("bisma-interactive");
+  const [activeCardId, setActiveCardId] = useState<string>("birthday-demo");
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>("interactive-suite");
 
   const { isAuthenticated, user, logout } = useAdminAuth();
 

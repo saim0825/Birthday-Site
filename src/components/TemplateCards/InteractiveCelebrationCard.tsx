@@ -4,13 +4,13 @@ import { soundFx } from "../../lib/audio";
 import { fireConfettiCannon, fireFireworks, fireBalloonPopBurst } from "../../lib/confetti";
 import { PartyPopper, Heart, Sparkles, Flame, Gift, Volume2, VolumeX, Share2, Send, CheckCircle2 } from "lucide-react";
 
-interface BismaCardProps {
+interface InteractiveCelebrationCardProps {
   card: CardData;
   onSendReaction?: (emoji: string, text: string, senderName: string) => void;
   isCustomPreview?: boolean;
 }
 
-export const BismaCard: React.FC<BismaCardProps> = ({ card, onSendReaction, isCustomPreview }) => {
+export const InteractiveCelebrationCard: React.FC<InteractiveCelebrationCardProps> = ({ card, onSendReaction, isCustomPreview }) => {
   const [candlesBlown, setCandlesBlown] = useState(false);
   const [giftOpened, setGiftOpened] = useState(false);
   const [activePhotoIndex, setActivePhotoIndex] = useState(0);
@@ -465,7 +465,7 @@ export const BismaCard: React.FC<BismaCardProps> = ({ card, onSendReaction, isCu
               <div>
                 <input
                   type="text"
-                  placeholder="Your Name (e.g. Bisma)"
+                  placeholder="Your Name (e.g. Sarah)"
                   value={reactionSender}
                   onChange={(e) => setReactionSender(e.target.value)}
                   className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-pink-500 mb-2"

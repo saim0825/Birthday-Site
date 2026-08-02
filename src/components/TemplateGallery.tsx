@@ -22,8 +22,8 @@ interface TemplateGalleryProps {
 
 export const TEMPLATES_DATA = [
   {
-    id: "bisma-interactive",
-    name: "Bisma Celebration Suite",
+    id: "interactive-suite",
+    name: "Grand Celebration Suite",
     description: "The fan-favorite interactive website! Features blowable candles, 3D gift unboxing, photo memory gallery, synth audio & balloon popping.",
     badge: "Featured & Popular",
     isPopular: true,
@@ -61,6 +61,16 @@ export const TEMPLATES_DATA = [
     previewUrl: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=600&auto=format&fit=crop",
     icon: Heart,
     features: ["Floating Hearts", "Velvet Note", "Couples Timeline", "Soft Candle Glow"]
+  },
+  {
+    id: "glassmorphism-envelope",
+    name: "Envelope & Precious Memories",
+    description: "Interactive envelope opening experience with typing effect, star/balloon canvas, photo gallery, squabbles stage, and final surprise popup modal.",
+    badge: "New & Interactive",
+    accentColor: "from-purple-500 via-pink-500 to-indigo-600",
+    previewUrl: "https://i.postimg.cc/T1WkQP0S/IMG-7302.avif",
+    icon: Sparkles,
+    features: ["Envelope Unboxing", "Typing Effect", "Memory Grid", "Surprise Popup"]
   }
 ];
 
@@ -289,11 +299,11 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({
                             <ArrowRight className="w-4 h-4" />
                           </button>
 
-                          {template.id === "bisma-interactive" && (
+                          {template.id === "interactive-suite" && (
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                onPreviewDemo("bisma-birthday");
+                                onPreviewDemo("birthday-demo");
                               }}
                               className="px-3.5 py-3 rounded-full bg-[#FCE7EC] hover:bg-[#fbd3dd] text-[#D82C5D] border border-[#EE4374]/30 font-bold text-xs flex items-center gap-1 cursor-pointer"
                               title="Live Demo"

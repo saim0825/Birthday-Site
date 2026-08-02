@@ -75,14 +75,14 @@ export const defaultHero: HeroSectionConfig = {
 
 export const defaultTemplates: ThemeTemplateItem[] = [
   {
-    id: "bisma-interactive",
+    id: "interactive-suite",
     name: "Interactive Blowable Candle Suite",
     thumbnailUrl: "https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=600&auto=format&fit=crop",
     category: "Interactive",
     description: "Features blowable candle simulation via microphone/click, 3D gift unboxing, and popping balloons.",
     priceType: "free",
     buttonText: "Use Template",
-    buttonLink: "/creator?template=bisma-interactive",
+    buttonLink: "/creator?template=interactive-suite",
     tags: ["Candle", "Interactive", "Popular", "3D"],
     status: "published",
     orderIndex: 1,
@@ -125,6 +125,19 @@ export const defaultTemplates: ThemeTemplateItem[] = [
     tags: ["Neon", "Party", "Cyberpunk"],
     status: "published",
     orderIndex: 4,
+  },
+  {
+    id: "glassmorphism-envelope",
+    name: "Glassmorphism Envelope & Precious Memories",
+    thumbnailUrl: "https://i.postimg.cc/T1WkQP0S/IMG-7302.avif",
+    category: "Interactive",
+    description: "Interactive envelope opening experience, typing effect, floating stars & balloons canvas, photo memory grid, funny squabbles section, and final surprise popup modal.",
+    priceType: "free",
+    buttonText: "Use Template",
+    buttonLink: "/creator?template=glassmorphism-envelope",
+    tags: ["Envelope", "Memories", "Interactive", "Glassmorphism"],
+    status: "published",
+    orderIndex: 5,
   },
 ];
 
@@ -253,10 +266,10 @@ export const defaultReviews: ReviewItem[] = [
 
 export const defaultWishes: WishRecord[] = [
   {
-    id: "bisma-birthday",
-    recipientName: "Bisma",
+    id: "birthday-demo",
+    recipientName: "Sarah",
     senderName: "Friends & Family",
-    templateId: "bisma-interactive",
+    templateId: "interactive-suite",
     message: "May your birthday be filled with endless smiles, laughter, sweet surprises, and unforgettable moments!",
     viewsCount: 3420,
     createdAt: "2026-07-25",

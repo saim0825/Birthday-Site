@@ -47,7 +47,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, onSelectTe
   // Interactive AI Generator Demo State
   const [aiDemoOccasion, setAiDemoOccasion] = useState<"Birthday" | "Bestie" | "Anniversary">("Birthday");
   const [aiDemoResult, setAiDemoResult] = useState(
-    "Happy Birthday Bisma! 🎉 May your year ahead be packed with endless laughter, spontaneous adventures, and unforgettable memories!"
+    "Happy Birthday Sarah! 🎉 May your year ahead be packed with endless laughter, spontaneous adventures, and unforgettable memories!"
   );
   const [isGeneratingAi, setIsGeneratingAi] = useState(false);
 
@@ -326,78 +326,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, onSelectTe
         </div>
       </section>
 
-      {/* ================= ORIGINAL BENTO FEATURE GRID (ORIGINAL STRUCTURE) ================= */}
-      <section className="py-20 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FCE7EC] border border-[#EE4374]/20 text-[#D82C5D] text-xs font-extrabold uppercase tracking-wider">
-              <PartyPopper className="w-3.5 h-3.5 text-[#EE4374]" />
-              <span>Engineered For Joy</span>
-            </div>
-            <h2 className={`font-extrabold text-[#2A1A1F] font-serif-display tracking-tight ${settings.sectionHeadingFontSize || "text-3xl sm:text-5xl"}`}>
-              Everything Needed For An <span className="italic text-[#EE4374]">Unforgettable Wish</span>
-            </h2>
-            <p className={`text-[#635158] leading-relaxed ${settings.bodyTextFontSize || "text-sm sm:text-base"}`}>
-              Standard greeting cards get lost in chat histories. CelebrationCraft creates an immersive website experience that recipients cherish forever.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Bento Card 1: Mic Blowing */}
-            <div className="flow-card rounded-[28px] p-8 flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#FCE7EC] flex items-center justify-center text-[#EE4374]">
-                  <Flame className="w-6 h-6" />
-                </div>
-                <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#D82C5D] block">AUDIO MIC SENSOR</span>
-                <h3 className="text-xl font-bold font-serif-display text-[#2A1A1F]">Blow Out Real Candles</h3>
-                <p className="text-xs sm:text-sm text-[#635158] leading-relaxed">
-                  Using real-time web microphone frequency detection, recipients can blow directly into their phone or mic to extinguish the birthday flames.
-                </p>
-              </div>
-              <div className="pt-6 border-t border-[#EE4374]/10 text-xs font-bold text-[#EE4374] flex items-center gap-1">
-                <span>Microphone Detection Supported</span>
-              </div>
-            </div>
-
-            {/* Bento Card 2: DARK BURGUNDY PLUM LUXURY UNBOXING CARD (#32101E) */}
-            <div className="flow-card-dark rounded-[28px] p-8 text-white flex flex-col justify-between relative overflow-hidden">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-[#EE4374]">
-                  <Lock className="w-6 h-6" />
-                </div>
-                <span className="text-[10px] font-extrabold uppercase tracking-widest text-rose-300 block">3D ENVELOPE UNBOXING</span>
-                <h3 className="text-2xl font-bold font-serif-display text-white">Realistic Wax Seal & Ribbon</h3>
-                <p className="text-xs sm:text-sm text-rose-100/80 leading-relaxed">
-                  Recipients slide open a tactile envelope with wax seal breaking sound effects before revealing your personalized celebration layout.
-                </p>
-              </div>
-
-              <div className="pt-6 border-t border-white/10 flex items-center justify-between text-xs font-bold text-rose-200">
-                <span>Wax Seal Sound FX</span>
-                <span className="text-[#EE4374]">✨ VIP Theme</span>
-              </div>
-            </div>
-
-            {/* Bento Card 3: Memory Timeline */}
-            <div className="flow-card rounded-[28px] p-8 flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#FCE7EC] flex items-center justify-center text-[#EE4374]">
-                  <Layers className="w-6 h-6" />
-                </div>
-                <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#D82C5D] block">PHOTO CAROUSEL</span>
-                <h3 className="text-xl font-bold font-serif-display text-[#2A1A1F]">Photo Memory Frames</h3>
-                <p className="text-xs sm:text-sm text-[#635158] leading-relaxed">
-                  Upload cherished memory photos with custom captions that animate smoothly as your recipient scrolls through your wish site.
-                </p>
-              </div>
-              <div className="pt-6 border-t border-[#EE4374]/10 text-xs font-bold text-[#EE4374] flex items-center gap-1">
-                <span>Unlimited High-Res Uploads</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ================= INTERACTIVE TEMPLATE GALLERY SECTION ================= */}
       <TemplateGallery
@@ -487,7 +416,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, onSelectTe
               {
                 step: "01",
                 title: "Select Interactive Theme",
-                desc: "Choose from our suite of themes — Bisma Celebration, Royal Gold Velvet, Cyber Neon, or Romantic Sweetheart."
+                desc: "Choose from our suite of themes — Grand Celebration, Royal Gold Velvet, Cyber Neon, or Romantic Sweetheart."
               },
               {
                 step: "02",
@@ -555,7 +484,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, onSelectTe
             <div className="space-y-3">
               <h4 className="text-[11px] font-extrabold uppercase tracking-widest text-[#2A1A1F]">THEMES</h4>
               <ul className="space-y-2">
-                <li><button onClick={() => onNavigate("gallery")} className="hover:text-[#EE4374]">Bisma Celebration</button></li>
+                <li><button onClick={() => onNavigate("gallery")} className="hover:text-[#EE4374]">Grand Celebration</button></li>
                 <li><button onClick={() => onNavigate("gallery")} className="hover:text-[#EE4374]">Royal Gold Velvet</button></li>
                 <li><button onClick={() => onNavigate("gallery")} className="hover:text-[#EE4374]">Cyber Neon Beat</button></li>
                 <li><button onClick={() => onNavigate("gallery")} className="hover:text-[#EE4374]">Sweetheart Pink</button></li>
@@ -574,7 +503,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, onSelectTe
             <div className="space-y-3">
               <h4 className="text-[11px] font-extrabold uppercase tracking-widest text-[#2A1A1F]">DEMOS</h4>
               <ul className="space-y-2">
-                <li><button onClick={() => onNavigate("view", "bisma-birthday")} className="hover:text-[#EE4374]">Birthday Demo</button></li>
+                <li><button onClick={() => onNavigate("view", "birthday-demo")} className="hover:text-[#EE4374]">Birthday Demo</button></li>
                 <li><button onClick={() => onNavigate("creator")} className="hover:text-[#EE4374]">Anniversary Wish</button></li>
               </ul>
             </div>
