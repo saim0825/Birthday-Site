@@ -16,27 +16,60 @@ app.use(express.json({ limit: "25mb" }));
 const DATA_DIR = path.join(process.cwd(), "data");
 const CARDS_FILE = path.join(DATA_DIR, "cards.json");
 
-// Firebase connection pooling setup
+// Firebase connection pooling setup for Vercel Serverless
 let db: ReturnType<typeof getFirestore> | null = null;
-try {
-  const configPath = path.join(process.cwd(), "firebase-applet-config.json");
-  if (fs.existsSync(configPath)) {
-    const firebaseConfigJson = JSON.parse(fs.readFileSync(configPath, "utf-8"));
-    const firebaseConfig = {
-      apiKey: firebaseConfigJson.apiKey,
-      authDomain: firebaseConfigJson.authDomain,
-      projectId: firebaseConfigJson.projectId,
-      storageBucket: firebaseConfigJson.storageBucket,
-      messagingSenderId: firebaseConfigJson.messagingSenderId,
-      appId: firebaseConfigJson.appId,
-    };
-    const firebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-    const databaseId = firebaseConfigJson.firestoreDatabaseId || "(default)";
-    db = getFirestore(firebaseApp, databaseId);
-    console.log("[Firebase] Firestore database connection initialized with connection pooling.");
+
+function getFirestoreDb() {
+  if (db) return db;
+  try {
+    let firebaseConfigJson: any = null;
+
+    // 1. Check Vercel or Node environment variables
+    if (process.env.FIREBASE_CONFIG) {
+      try {
+        firebaseConfigJson = JSON.parse(process.env.FIREBASE_CONFIG);
+      } catch (e) {}
+    }
+    
+    if (!firebaseConfigJson && process.env.FIREBASE_API_KEY) {
+      firebaseConfigJson = {
+        apiKey: process.env.FIREBASE_API_KEY,
+        authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+        appId: process.env.FIREBASE_APP_ID,
+        firestoreDatabaseId: process.env.FIREBASE_DATABASE_ID || "(default)"
+      };
+    }
+
+    // 2. Fall back to local firebase applet config JSON file
+    if (!firebaseConfigJson) {
+      const configPath = path.join(process.cwd(), "firebase-applet-config.json");
+      if (fs.existsSync(configPath)) {
+        firebaseConfigJson = JSON.parse(fs.readFileSync(configPath, "utf-8"));
+      }
+    }
+
+    if (firebaseConfigJson) {
+      const firebaseConfig = {
+        apiKey: firebaseConfigJson.apiKey,
+        authDomain: firebaseConfigJson.authDomain,
+        projectId: firebaseConfigJson.projectId,
+        storageBucket: firebaseConfigJson.storageBucket,
+        messagingSenderId: firebaseConfigJson.messagingSenderId,
+        appId: firebaseConfigJson.appId,
+      };
+      const firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+      const databaseId = firebaseConfigJson.firestoreDatabaseId || "(default)";
+      db = getFirestore(firebaseApp, databaseId);
+      console.log("[Firebase] Firestore database connection initialized with serverless connection pooling.");
+      return db;
+    }
+  } catch (err: any) {
+    console.warn("[Firebase] Could not initialize Firestore database connection:", err?.message || err);
   }
-} catch (err) {
-  console.warn("[Firebase] Could not initialize Firestore on server:", err);
+  return null;
 }
 
 export interface CardData {
@@ -98,28 +131,34 @@ function saveCardsToDisk() {
 }
 
 async function saveCardToFirestore(card: CardData) {
-  if (!db) return;
+  const dbInstance = getFirestoreDb();
+  if (!dbInstance) {
+    console.warn("[Firestore] No database connection available. Saved card in memory cache.");
+    return;
+  }
   try {
-    const cardRef = doc(db, "cards", card.id);
+    const cardRef = doc(dbInstance, "cards", card.id);
     await setDoc(cardRef, card, { merge: true });
-    console.log(`[Firestore] Successfully saved card ${card.id}`);
-  } catch (err) {
-    console.error(`[Firestore] Error saving card ${card.id}:`, err);
+    console.log(`[Firestore] Successfully persisted card ${card.id}`);
+  } catch (err: any) {
+    console.error(`[Firestore Error] Failed to save card ${card.id}:`, err?.message || err);
+    throw new Error(`Firestore database error: ${err?.message || "Write failed"}`);
   }
 }
 
 async function getCardFromFirestore(id: string): Promise<CardData | null> {
-  if (!db) return null;
+  const dbInstance = getFirestoreDb();
+  if (!dbInstance) return null;
   try {
-    const cardRef = doc(db, "cards", id);
+    const cardRef = doc(dbInstance, "cards", id);
     const snap = await getDoc(cardRef);
     if (snap.exists()) {
       const data = snap.data() as CardData;
       cardsDatabase[id] = data; // Cache in serverless memory
       return data;
     }
-  } catch (err) {
-    console.error(`[Firestore] Error fetching card ${id}:`, err);
+  } catch (err: any) {
+    console.error(`[Firestore Error] Fetching card ${id}:`, err?.message || err);
   }
   return null;
 }
@@ -465,9 +504,15 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`CelebrationCraft SaaS Server running on http://0.0.0.0:${PORT}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`CelebrationCraft SaaS Server running on http://0.0.0.0:${PORT}`);
+    });
+  }
 }
 
-startServer();
+if (!process.env.VERCEL) {
+  startServer();
+}
+
+export default app;
