@@ -2,15 +2,11 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/api/save-card",
-      "destination": "/api/save-card.ts"
-    },
-    {
-      "source": "/api/cards/:path*",
-      "destination": "/api/cards.ts"
-    },
-    {
       "source": "/api/(.*)",
+      "destination": "/api/index.ts"
+    },
+    {
+      "source": "/api",
       "destination": "/api/index.ts"
     },
     {

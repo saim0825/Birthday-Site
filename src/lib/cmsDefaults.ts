@@ -42,12 +42,12 @@ export const defaultSettings: WebsiteSettings = {
 };
 
 export const defaultHero: HeroSectionConfig = {
-  headline: "One Click. Free. Interactive Birthday Wishes",
-  subheading: "Create beautiful interactive birthday websites with music, blowable candles, photo memories, surprise gifts, balloons, confetti, and magical animations—all for free in just one click.",
-  buttonText: "Create Free Wish",
+  headline: "Make Them\nFeel Truly Special",
+  subheading: "Create stunning digital birthday pages and celebration websites for anniversaries, Valentine's, and every moment that deserves more than just a simple wish.",
+  buttonText: "Create Your Wish →",
   buttonLink: "/creator",
   heroBgImage: defaultHeroBgImage,
-  badgeText: "Next-Gen Digital Greeting Platform",
+  badgeText: "#1 Digital Celebration Platform | Voted Top Brand",
   ratingText: "4.9/5 Rating",
   wishesCreatedCount: "1.2M+",
   lovedByCount: "12K+",
@@ -61,15 +61,15 @@ export const defaultHero: HeroSectionConfig = {
   showBadge: true,
   showRating: true,
   showAvatars: true,
-  headlineFontSize: "text-4xl sm:text-6xl lg:text-7xl",
-  subheadingFontSize: "text-base sm:text-lg",
-  badgeFontSize: "text-xs",
-  buttonFontSize: "text-base",
+  headlineFontSize: "text-5xl sm:text-7xl lg:text-8xl",
+  subheadingFontSize: "text-base sm:text-lg md:text-xl",
+  badgeFontSize: "text-xs sm:text-sm",
+  buttonFontSize: "text-base sm:text-lg",
   heroPhotoPlacement: "background",
   heroPhotoPosition: "object-[82%_center]",
   heroPhotoFit: "object-cover",
   heroPhotoSize: "w-full",
-  heroPhotoHeight: "min-h-[580px] lg:min-h-[660px]",
+  heroPhotoHeight: "min-h-[580px] lg:min-h-[640px]",
   heroPhotoOpacity: 100,
 };
 

@@ -100,25 +100,42 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, onSelectTe
       <div className="absolute top-[30%] right-[-120px] w-[500px] h-[500px] bg-[#FBE7ED] rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute bottom-[-50px] left-[25%] w-[450px] h-[450px] bg-[#FDE8EE] rounded-full blur-[140px] pointer-events-none" />
 
-      {/* ================= HERO SECTION WITH DYNAMIC CMS DATA ================= */}
+      {/* ================= HERO SECTION (MATCHING EXACT REFERENCE DESIGN) ================= */}
       {hero.showHeroSection && (
-        <section className={`relative flex items-center pt-12 pb-20 md:pt-16 md:pb-24 overflow-hidden z-10 ${hero.heroPhotoHeight || "min-h-[580px] lg:min-h-[660px]"}`}>
-          {/* Full Hero Background Image (When placement mode is "background") */}
-          {hero.heroBgImage && (hero.heroPhotoPlacement || "background") === "background" && (
-            <div className="absolute inset-0 w-full h-full z-0">
-              <img
-                src={hero.heroBgImage}
-                alt="Interactive Birthday Platform - Hero Celebration Scene"
-                className={`w-full h-full block ${hero.heroPhotoPosition || "object-[82%_center]"} ${hero.heroPhotoFit || "object-cover"}`}
-                style={{ opacity: (hero.heroPhotoOpacity ?? 100) / 100 }}
-                loading="eager"
-                decoding="async"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#FAF4EE] via-[#FAF4EE]/85 sm:via-[#FAF4EE]/70 lg:via-[#FAF4EE]/45 to-transparent pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#FAF4EE] via-transparent to-[#FAF4EE]/20 pointer-events-none" />
+        <section className="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden z-10 bg-gradient-to-b from-[#FFF5F7] via-[#FAF9FB] to-[#FAF8FA]">
+          {/* DECORATIVE FLOATING ELEMENTS */}
+          {/* Top Left Pink Star */}
+          <div className="absolute top-6 left-6 sm:left-14 z-10 pointer-events-none animate-pulse">
+            <svg className="w-7 h-7 sm:w-9 sm:h-9 text-[#EE2B55] fill-[#EE2B55]" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+          </div>
+
+          {/* Mid Left Orange 4-pointed Sparkle */}
+          <div className="absolute top-1/2 left-6 sm:left-20 -translate-y-1/2 z-10 pointer-events-none">
+            <svg className="w-6 h-6 sm:w-8 sm:h-8 text-[#FF6B4A] fill-[#FF6B4A]" viewBox="0 0 24 24">
+              <path d="M12 0l2.5 9.5L24 12l-9.5 2.5L12 24l-2.5-9.5L0 12l9.5-2.5z" />
+            </svg>
+          </div>
+
+          {/* Top Right Hanging Purple Balloon with String */}
+          <div className="absolute top-0 right-10 sm:right-24 z-10 pointer-events-none flex flex-col items-center">
+            <div className="w-0.5 h-10 bg-[#8B5CF6]/40" />
+            <div className="w-8 h-10 sm:w-10 sm:h-12 bg-[#8B5CF6] rounded-full shadow-md relative">
+              <div className="absolute top-2 left-2 w-2 h-3 bg-white/40 rounded-full" />
+              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-1 bg-[#7C3AED] rounded-sm" />
             </div>
-          )}
+            <div className="w-1 h-3 border-l border-[#8B5CF6]/50 rotate-12 -mt-0.5" />
+          </div>
+
+          {/* Bottom Right Floating Confetti Graphic */}
+          <div className="absolute bottom-20 right-16 sm:right-32 z-10 pointer-events-none">
+            <div className="relative">
+              <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[18px] border-b-[#A855F7] rotate-45" />
+              <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#3B82F6]" />
+              <div className="absolute bottom-0 -left-2 w-1.5 h-1.5 rounded-full bg-[#EC4899]" />
+            </div>
+          </div>
 
           {/* Interactive Balloon Canvas Layer */}
           <HeroBalloonCanvas
@@ -127,186 +144,77 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, onSelectTe
             }}
           />
 
-          {/* Hero Content Overlaid or Side-by-Side */}
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full">
-            {(hero.heroPhotoPlacement === "side-by-side" && hero.heroBgImage) ? (
-              /* SIDE BY SIDE SPLIT LAYOUT */
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                <div className="lg:col-span-7 text-center lg:text-left space-y-7">
-                  {hero.showBadge && hero.badgeText && (
-                    <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FCE7EC]/90 backdrop-blur-md border border-[#EE4374]/20 text-[#D82C5D] font-extrabold uppercase tracking-wider shadow-sm ${hero.badgeFontSize || "text-xs"}`}>
-                      <Sparkles className="w-3.5 h-3.5 text-[#EE4374] animate-pulse" />
-                      <span>{hero.badgeText}</span>
-                    </div>
-                  )}
-
-                  <h1 className={`font-extrabold leading-[1.12] tracking-tight font-serif-display text-[#2A1A1F] ${hero.headlineFontSize || "text-4xl sm:text-6xl lg:text-7xl"}`}>
-                    {hero.headline}
-                  </h1>
-
-                  <p className={`text-[#635158] leading-relaxed max-w-xl mx-auto lg:mx-0 font-normal ${hero.subheadingFontSize || "text-base sm:text-lg"}`}>
-                    {hero.subheading}
-                  </p>
-
-                  {/* Primary CTA */}
-                  <div className="pt-2 flex justify-center lg:justify-start">
-                    <button
-                      onClick={() => onNavigate("creator")}
-                      className={`flow-btn-primary px-9 py-4 rounded-full font-bold text-white flex items-center justify-center gap-3 cursor-pointer shadow-xl transition-all active:scale-95 w-full sm:w-auto ${hero.buttonFontSize || "text-base"}`}
-                    >
-                      <Wand2 className="w-5 h-5 text-white" />
-                      <span>{hero.buttonText}</span>
-                      <ArrowRight className="w-5 h-5 text-white" />
-                    </button>
-                  </div>
-
-                  {/* Social Proof & Metrics */}
-                  <div className="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-5 text-xs font-semibold text-[#635158]">
-                    <div className="flex items-center gap-2 bg-[#FFFDFB]/80 backdrop-blur-sm px-3.5 py-1.5 rounded-full border border-[#EE4374]/15 shadow-sm">
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                      <span><strong className="text-[#2A1A1F]">{hero.wishesCreatedCount}</strong> Wishes Created</span>
-                    </div>
-
-                    {hero.showRating && (
-                      <div className="flex items-center gap-1.5 text-[#EE4374] bg-[#FFFDFB]/80 backdrop-blur-sm px-3.5 py-1.5 rounded-full border border-[#EE4374]/15 shadow-sm">
-                        {"★".repeat(5)} <span className="font-extrabold text-[#2A1A1F]">{hero.ratingText}</span>
-                      </div>
-                    )}
-
-                    {hero.showAvatars && hero.customerAvatars.length > 0 && (
-                      <div className="flex items-center gap-2 bg-[#FFFDFB]/80 backdrop-blur-sm px-3.5 py-1.5 rounded-full border border-[#EE4374]/15 shadow-sm">
-                        <div className="flex -space-x-2 overflow-hidden">
-                          {hero.customerAvatars.map((url, idx) => (
-                            <img key={idx} className="inline-block h-6 w-6 rounded-full ring-2 ring-[#FFFDFB] object-cover" src={url} alt="User" />
-                          ))}
-                        </div>
-                        <span className="text-xs text-[#635158] font-medium flex items-center gap-1">
-                          Loved worldwide <Heart className="w-3.5 h-3.5 text-[#EE4374] fill-current" />
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Right Column Photo Frame */}
-                <div className="lg:col-span-5 flex justify-center">
-                  <div className={`relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#FFFDFB] bg-[#FFFDFB] p-2 ring-1 ring-[#EE4374]/20 ${hero.heroPhotoSize || "w-full"}`}>
-                    <img
-                      src={hero.heroBgImage}
-                      alt="Hero Feature Frame"
-                      className={`w-full h-80 sm:h-96 rounded-2xl block ${hero.heroPhotoPosition || "object-center"} ${hero.heroPhotoFit || "object-cover"}`}
-                      style={{ opacity: (hero.heroPhotoOpacity ?? 100) / 100 }}
-                    />
-                    <div className="absolute bottom-4 left-4 right-4 bg-[#FFFDFB]/90 backdrop-blur-md p-3 rounded-xl border border-[#EE4374]/15 text-center">
-                      <span className="text-xs font-bold text-[#D82C5D] flex items-center justify-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-[#EE4374]" /> Interactive Celebration Studio
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : hero.heroPhotoPlacement === "photo-top" && hero.heroBgImage ? (
-              /* TOP PHOTO BANNER LAYOUT */
-              <div className="max-w-3xl mx-auto text-center space-y-7">
-                <div className="flex justify-center">
-                  <div className={`relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#FFFDFB] bg-[#FFFDFB] p-2 ${hero.heroPhotoSize || "w-full"}`}>
-                    <img
-                      src={hero.heroBgImage}
-                      alt="Hero Top Banner"
-                      className={`w-full h-64 sm:h-80 rounded-2xl block ${hero.heroPhotoPosition || "object-center"} ${hero.heroPhotoFit || "object-cover"}`}
-                      style={{ opacity: (hero.heroPhotoOpacity ?? 100) / 100 }}
-                    />
-                  </div>
-                </div>
-
-                {hero.showBadge && hero.badgeText && (
-                  <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FCE7EC]/90 backdrop-blur-md border border-[#EE4374]/20 text-[#D82C5D] font-extrabold uppercase tracking-wider shadow-sm ${hero.badgeFontSize || "text-xs"}`}>
-                    <Sparkles className="w-3.5 h-3.5 text-[#EE4374] animate-pulse" />
-                    <span>{hero.badgeText}</span>
-                  </div>
-                )}
-
-                <h1 className={`font-extrabold leading-[1.12] tracking-tight font-serif-display text-[#2A1A1F] ${hero.headlineFontSize || "text-4xl sm:text-6xl lg:text-7xl"}`}>
-                  {hero.headline}
-                </h1>
-
-                <p className={`text-[#635158] leading-relaxed max-w-xl mx-auto font-normal ${hero.subheadingFontSize || "text-base sm:text-lg"}`}>
-                  {hero.subheading}
-                </p>
-
-                {/* Primary CTA */}
-                <div className="pt-2 flex justify-center">
-                  <button
-                    onClick={() => onNavigate("creator")}
-                    className={`flow-btn-primary px-9 py-4 rounded-full font-bold text-white flex items-center justify-center gap-3 cursor-pointer shadow-xl transition-all active:scale-95 w-full sm:w-auto ${hero.buttonFontSize || "text-base"}`}
-                  >
-                    <Wand2 className="w-5 h-5 text-white" />
-                    <span>{hero.buttonText}</span>
-                    <ArrowRight className="w-5 h-5 text-white" />
-                  </button>
-                </div>
-              </div>
-            ) : (
-              /* STANDARD BACKGROUND OVERLAY LAYOUT */
-              <div className="max-w-2xl text-center lg:text-left space-y-7">
-                {hero.showBadge && hero.badgeText && (
-                  <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FCE7EC]/90 backdrop-blur-md border border-[#EE4374]/20 text-[#D82C5D] font-extrabold uppercase tracking-wider shadow-sm ${hero.badgeFontSize || "text-xs"}`}>
-                    <Sparkles className="w-3.5 h-3.5 text-[#EE4374] animate-pulse" />
-                    <span>{hero.badgeText}</span>
-                  </div>
-                )}
-
-                <h1 className={`font-extrabold leading-[1.12] tracking-tight font-serif-display text-[#2A1A1F] ${hero.headlineFontSize || "text-4xl sm:text-6xl lg:text-7xl"}`}>
-                  {hero.headline}
-                </h1>
-
-                <p className={`text-[#635158] leading-relaxed max-w-xl mx-auto lg:mx-0 font-normal ${hero.subheadingFontSize || "text-base sm:text-lg"}`}>
-                  {hero.subheading}
-                </p>
-
-                {/* Primary CTA */}
-                <div className="pt-2 flex justify-center lg:justify-start">
-                  <button
-                    onClick={() => onNavigate("creator")}
-                    className={`flow-btn-primary px-9 py-4 rounded-full font-bold text-white flex items-center justify-center gap-3 cursor-pointer shadow-xl transition-all active:scale-95 w-full sm:w-auto ${hero.buttonFontSize || "text-base"}`}
-                  >
-                    <Wand2 className="w-5 h-5 text-white" />
-                    <span>{hero.buttonText}</span>
-                    <ArrowRight className="w-5 h-5 text-white" />
-                  </button>
-                </div>
-
-                {/* Social Proof & Metrics */}
-                <div className="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-5 text-xs font-semibold text-[#635158]">
-                  <div className="flex items-center gap-2 bg-[#FFFDFB]/80 backdrop-blur-sm px-3.5 py-1.5 rounded-full border border-[#EE4374]/15 shadow-sm">
-                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span><strong className="text-[#2A1A1F]">{hero.wishesCreatedCount}</strong> Wishes Created</span>
-                  </div>
-
-                  {hero.showRating && (
-                    <div className="flex items-center gap-1.5 text-[#EE4374] bg-[#FFFDFB]/80 backdrop-blur-sm px-3.5 py-1.5 rounded-full border border-[#EE4374]/15 shadow-sm">
-                      {"★".repeat(5)} <span className="font-extrabold text-[#2A1A1F]">{hero.ratingText}</span>
-                    </div>
-                  )}
-
-                  {hero.showAvatars && hero.customerAvatars.length > 0 && (
-                    <div className="flex items-center gap-2 bg-[#FFFDFB]/80 backdrop-blur-sm px-3.5 py-1.5 rounded-full border border-[#EE4374]/15 shadow-sm">
-                      <div className="flex -space-x-2 overflow-hidden">
-                        {hero.customerAvatars.map((url, idx) => (
-                          <img key={idx} className="inline-block h-6 w-6 rounded-full ring-2 ring-[#FFFDFB] object-cover" src={url} alt="User" />
-                        ))}
-                      </div>
-                      <span className="text-xs text-[#635158] font-medium flex items-center gap-1">
-                        Loved worldwide <Heart className="w-3.5 h-3.5 text-[#EE4374] fill-current" />
-                      </span>
-                    </div>
-                  )}
+          {/* Main Hero Container */}
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-20 text-center">
+            {/* Top Pill Badge */}
+            {hero.showBadge && (
+              <div className="flex justify-center mb-6">
+                <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#FEE2E8]/80 border border-[#F43F5E]/20 shadow-xs backdrop-blur-xs">
+                  <span className="text-[#E11D48] text-xs font-bold">•</span>
+                  <span className="text-xs">✨</span>
+                  <span className="text-[#E11D48] font-bold text-xs sm:text-sm tracking-tight">
+                    {hero.badgeText || "#1 Digital Celebration Platform | Voted Top Brand"}
+                  </span>
                 </div>
               </div>
             )}
+
+            {/* Main Headline */}
+            <h1 className="font-black tracking-tight leading-[1.08] text-[#0F172A] text-5xl sm:text-7xl lg:text-8xl max-w-4xl mx-auto">
+              <div>Make Them</div>
+              <div className="text-[#EE2B55] mt-1 sm:mt-2">
+                Feel Truly Special
+              </div>
+            </h1>
+
+            {/* Subtitle Paragraph */}
+            <p className="mt-6 text-slate-600 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-normal">
+              Create stunning <strong className="font-bold text-slate-900">digital birthday pages</strong> and <strong className="font-bold text-slate-900">celebration websites</strong> for anniversaries, Valentine's, and every moment that deserves more than just a simple wish.
+            </p>
+
+            {/* Action Buttons */}
+            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5">
+              <button
+                onClick={() => onNavigate("creator")}
+                className="w-full sm:w-auto bg-[#EE2B55] hover:bg-[#D91B43] text-white font-bold text-base sm:text-lg px-8 py-4 rounded-2xl shadow-lg shadow-[#EE2B55]/30 transition-all duration-200 active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>{hero.buttonText || "Create Your Wish →"}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  const galleryEl = document.getElementById("template-gallery-section");
+                  if (galleryEl) {
+                    galleryEl.scrollIntoView({ behavior: "smooth" });
+                  } else {
+                    onNavigate("gallery");
+                  }
+                }}
+                className="w-full sm:w-auto bg-[#F8FAFC] hover:bg-white border-2 border-slate-900 text-slate-900 font-bold text-base sm:text-lg px-8 py-4 rounded-2xl shadow-sm transition-all duration-200 active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer"
+              >
+                <span className="text-xs text-slate-900">►</span>
+                <span>See How It Works</span>
+              </button>
+            </div>
+
+            {/* Subtext under buttons */}
+            <div className="mt-6 text-slate-500 font-bold text-xs sm:text-sm tracking-wide">
+              Birthday • Anniversary • Valentine's • And more
+            </div>
           </div>
         </section>
       )}
+
+      {/* Floating Bottom Right Feedback Button */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <button
+          onClick={() => alert("Thank you for your feedback! We love making your moments special.")}
+          className="bg-[#0F172A] hover:bg-[#1E293B] text-white text-xs sm:text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full shadow-xl flex items-center gap-2 transition-all cursor-pointer border border-white/10 active:scale-95"
+        >
+          <span className="text-sm">💬</span>
+          <span>Your feedback is precious to us</span>
+        </button>
+      </div>
 
       {/* ================= TRUST RIBBON & FEATURES (EXACT COLOR ATMOSPHERE) ================= */}
       <section className="py-6 bg-[#FDF6F4] border-y border-[#EE4374]/10">

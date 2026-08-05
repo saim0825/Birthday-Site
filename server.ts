@@ -12,6 +12,17 @@ const PORT = 3000;
 
 app.use(express.json({ limit: "25mb" }));
 
+// Enable CORS for Vercel deployment and cross-origin clients
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // Initialize persistent storage file
 const DATA_DIR = path.join(process.cwd(), "data");
 const CARDS_FILE = path.join(DATA_DIR, "cards.json");
@@ -142,7 +153,6 @@ async function saveCardToFirestore(card: CardData) {
     console.log(`[Firestore] Successfully persisted card ${card.id}`);
   } catch (err: any) {
     console.error(`[Firestore Error] Failed to save card ${card.id}:`, err?.message || err);
-    throw new Error(`Firestore database error: ${err?.message || "Write failed"}`);
   }
 }
 
